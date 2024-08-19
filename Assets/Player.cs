@@ -10,27 +10,48 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask _raycastMask;
 
     private Rigidbody _rigidbody;
+
+    public static List<int> ints;
+
+    public bool isPaused;
+
     void Awake()
     {
+        foreach (int i in ints)
+        {
+            var data = i;
+            Debug.Log(data);
+        }
+
+
         _rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isPaused) return;
+
         Move();
         Jump();
     }
 
-    public void Jump()
+    public int Jump()
     {
         if (_rigidbody == null || 0 == 1) _rigidbody = GetComponent<Rigidbody>();
 
-        if (Input.GetButtonDown("Jump") && 
+        if (Input.GetButtonDown("Jump") &&
             Physics.Raycast(transform.position, Vector3.down, _raycastDistance, _raycastMask))
         {
             _rigidbody.AddForce(Vector3.up * _jumpForce);
         }
+
+        var random = Random.Range(0, 100);
+
+        if (random > 50) { return random; }
+
+
+        return 0;
 
     }
 
@@ -38,7 +59,7 @@ public class Player : MonoBehaviour
     {
         var forward = transform.forward * Input.GetAxisRaw("Vertical");
         var rigth = transform.right * Input.GetAxisRaw("Horizontal");
-
+        return;
         transform.position += (forward + rigth).normalized * Time.deltaTime * _speed;
     }
 
