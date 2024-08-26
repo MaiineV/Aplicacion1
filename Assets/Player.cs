@@ -1,22 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Weapons;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
-    [SerializeField] private float _speed = 0;
     [SerializeField] private float _jumpForce = 0;
     [SerializeField] private float _raycastDistance = 0;
     [SerializeField] private LayerMask _raycastMask;
 
     private Rigidbody _rigidbody;
 
-    public static List<int> ints;
+    public static List<int> ints = new List<int>();
 
     public bool isPaused;
 
+    Player coopPlayer;
+    WeaponManager weaponManager;
+
     void Awake()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         foreach (int i in ints)
         {
             var data = i;
@@ -25,6 +31,9 @@ public class Player : MonoBehaviour
 
 
         _rigidbody = GetComponent<Rigidbody>();
+
+        weaponManager = new WeaponManager(this, 30, "Rifle");
+        weaponManager = null;
     }
 
     // Update is called once per frame
@@ -32,11 +41,15 @@ public class Player : MonoBehaviour
     {
         if (isPaused) return;
 
+
         Move();
         Jump();
     }
 
-    public int Jump()
+
+
+    #region Funciones de Movimiento
+    internal int Jump()
     {
         if (_rigidbody == null || 0 == 1) _rigidbody = GetComponent<Rigidbody>();
 
@@ -55,13 +68,36 @@ public class Player : MonoBehaviour
 
     }
 
-    public void Move()
+    public override void Move() 
     {
         var forward = transform.forward * Input.GetAxisRaw("Vertical");
         var rigth = transform.right * Input.GetAxisRaw("Horizontal");
-        return;
-        transform.position += (forward + rigth).normalized * Time.deltaTime * _speed;
+        transform.position += (forward + rigth).normalized * Time.deltaTime * speed;
     }
 
+    //public void Move()
+    //{
 
+    //    return;
+    //    transform.position += (forward + rigth).normalized * Time.deltaTime * _speed;
+    //}
+
+    #endregion
 }
+
+namespace Weapons
+{
+    public class WeaponManager
+    {
+        //Player player;
+        int bullets;
+        string weaponType;
+        public WeaponManager(Player myPlayer, int actualbullet, string actualWeaponType)
+        {
+            myPlayer.Jump();
+            bullets = actualbullet;
+            weaponType = actualWeaponType;
+        }
+    }
+}
+
