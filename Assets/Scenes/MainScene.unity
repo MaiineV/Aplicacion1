@@ -319,10 +319,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b96142cf0eaa042b5f83d7c2a18d3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 10
   speed: 40
   wayPoints:
   - {fileID: 225456412}
   - {fileID: 647622485}
+  detectionRange: 5
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  isSolid: 0
 --- !u!136 &505934136
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -406,6 +412,50 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.06, y: 8.933001, z: -19.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &541583302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 541583304}
+  - component: {fileID: 541583303}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &541583303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541583302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cece6a3481b1ad47ae607266c3ccbdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &541583304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541583302}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.0636501, y: -1.9309359, z: 6.7074656}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -871,6 +921,37 @@ Transform:
   - {fileID: 647622485}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1591931466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1591931467}
+  m_Layer: 0
+  m_Name: Foots
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1591931467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591931466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1600281247}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600281242
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,7 +967,7 @@ GameObject:
   - component: {fileID: 1600281243}
   - component: {fileID: 1600281248}
   - component: {fileID: 1600281249}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -905,12 +986,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a9e2dd49f298a4ebab626bb0cc6a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 50
   speed: 50
-  _jumpForce: 15
-  _raycastDistance: 1
+  _jumpForce: 400
+  _raycastDistance: 0.1
   _raycastMask:
     serializedVersion: 2
     m_Bits: 64
+  _footTransform: {fileID: 1591931467}
   isPaused: 0
 --- !u!136 &1600281244
 CapsuleCollider:
@@ -994,12 +1077,13 @@ Transform:
   m_GameObject: {fileID: 1600281242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.15, z: -0.4}
+  m_LocalPosition: {x: 0.257, y: 7.15, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 963194228}
   - {fileID: 1117558424}
+  - {fileID: 1591931467}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1600281248
@@ -1051,3 +1135,4 @@ SceneRoots:
   - {fileID: 84959418}
   - {fileID: 505934139}
   - {fileID: 1425051501}
+  - {fileID: 541583304}

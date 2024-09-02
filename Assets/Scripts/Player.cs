@@ -9,6 +9,8 @@ public class Player : Entity
     [SerializeField] private float _raycastDistance = 0;
     [SerializeField] private LayerMask _raycastMask;
 
+    [SerializeField] private Transform _footTransform;
+
     private Rigidbody _rigidbody;
 
     public static List<int> ints = new List<int>();
@@ -36,7 +38,6 @@ public class Player : Entity
         weaponManager = null;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isPaused) return;
@@ -46,7 +47,10 @@ public class Player : Entity
         Jump();
     }
 
-
+    private void Die()
+    {
+        GameManager.LoadLevel("Main Menu");
+    }
 
     #region Funciones de Movimiento
     internal int Jump()
@@ -54,8 +58,11 @@ public class Player : Entity
         if (_rigidbody == null || 0 == 1) _rigidbody = GetComponent<Rigidbody>();
 
         if (Input.GetButtonDown("Jump") &&
-            Physics.Raycast(transform.position, Vector3.down, _raycastDistance, _raycastMask))
+              Physics.Raycast(_footTransform.position, Vector3.down, _raycastDistance, _raycastMask))
         {
+            var actualVelocity = _rigidbody.velocity;
+            actualVelocity.y = 0;
+            _rigidbody.velocity = actualVelocity;
             _rigidbody.AddForce(Vector3.up * _jumpForce);
         }
 
@@ -68,7 +75,7 @@ public class Player : Entity
 
     }
 
-    public override void Move() 
+    public override void Move()
     {
         var forward = transform.forward * Input.GetAxisRaw("Vertical");
         var rigth = transform.right * Input.GetAxisRaw("Horizontal");
@@ -83,6 +90,12 @@ public class Player : Entity
     //}
 
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(_footTransform.position, _footTransform.position + Vector3.down * _raycastDistance);
+    }
 }
 
 namespace Weapons

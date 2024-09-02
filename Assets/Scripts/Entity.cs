@@ -5,7 +5,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Entity : MonoBehaviour
 {
-    protected float life;
+    [SerializeField] protected float life;
     [SerializeField] protected float speed;
 
     protected void Move(Vector3 target)
