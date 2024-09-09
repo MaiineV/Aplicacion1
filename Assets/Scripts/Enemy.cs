@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Entity
+public class Enemy : Entity, IDamagable
 {
 
     [SerializeField] private Transform[] wayPoints;
@@ -62,5 +62,15 @@ public class Enemy : Entity
         {
             Gizmos.DrawWireSphere(transform.position, detectionRange);
         }
+    }
+
+    public void ReciveDamage(float damage)
+    {
+        Debug.Log(life);
+        life-=damage;
+
+        Debug.Log(life);
+        if (life <= 0)
+            Destroy(gameObject);
     }
 }

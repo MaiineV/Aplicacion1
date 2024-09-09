@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Weapons;
 
-public class Player : Entity
+public class Player : Entity, IDamagable
 {
     [SerializeField] private float _jumpForce = 0;
     [SerializeField] private float _raycastDistance = 0;
     [SerializeField] private LayerMask _raycastMask;
 
     [SerializeField] private Transform _footTransform;
+
+    [SerializeField] private Weapon _fist;
 
     private Rigidbody _rigidbody;
 
@@ -34,8 +36,7 @@ public class Player : Entity
 
         _rigidbody = GetComponent<Rigidbody>();
 
-        weaponManager = new WeaponManager(this, 30, "Rifle");
-        weaponManager = null;
+        weaponManager = new WeaponManager(this, _fist);
     }
 
     void Update()
@@ -45,12 +46,40 @@ public class Player : Entity
 
         Move();
         Jump();
+
+        if (Input.GetMouseButtonDown(0))
+            weaponManager.Shoot();
+
+        //LoQueSea(5f, 10, "A", "B", "C");
+        //LoQueSea(5f);
+
+        string myName = "";
+        float damage= 10;
+        if(LoQueSea(out myName, damage))
+        {
+            Debug.Log("Aca");
+        }
+    }
+
+    public bool LoQueSea(out string name, float dmg, int life = 0, params string[] strings)
+    {
+        name = "Maine";
+        dmg = 0f;
+
+        return true;
+    }
+
+    public void LoQueSea()
+    {
+
     }
 
     private void Die()
     {
         GameManager.LoadLevel("Main Menu");
     }
+
+
 
     #region Funciones de Movimiento
     internal int Jump()
@@ -96,21 +125,9 @@ public class Player : Entity
         Gizmos.color = Color.red;
         Gizmos.DrawLine(_footTransform.position, _footTransform.position + Vector3.down * _raycastDistance);
     }
-}
 
-namespace Weapons
-{
-    public class WeaponManager
+    public void ReciveDamage(float damage)
     {
-        //Player player;
-        int bullets;
-        string weaponType;
-        public WeaponManager(Player myPlayer, int actualbullet, string actualWeaponType)
-        {
-            myPlayer.Jump();
-            bullets = actualbullet;
-            weaponType = actualWeaponType;
-        }
+        throw new System.NotImplementedException();
     }
 }
-
