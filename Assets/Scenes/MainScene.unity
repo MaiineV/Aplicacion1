@@ -320,6 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 10
+  maxLife: 0
   speed: 40
   wayPoints:
   - {fileID: 225456412}
@@ -1259,6 +1260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 50
+  maxLife: 0
   speed: 20
   _jumpForce: 400
   _raycastDistance: 0.1
@@ -1350,7 +1352,7 @@ Transform:
   m_GameObject: {fileID: 1600281242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.257, y: 7.15, z: -0.4}
+  m_LocalPosition: {x: 26.15, y: 7.15, z: 17.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
