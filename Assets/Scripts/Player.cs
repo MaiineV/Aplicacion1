@@ -22,6 +22,27 @@ public class Player : Entity, IDamagable
     Player coopPlayer;
     WeaponManager weaponManager;
 
+    public float Life 
+    {
+        get 
+        {
+            return life;
+        }
+        private set 
+        {
+            if (value > maxLife)
+            {
+                life = maxLife;
+            }
+            else
+            {
+                life = value;
+            }
+        }
+    }
+
+    public float GetLife { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
     void Awake()
     {
         Cursor.visible = false;
@@ -79,6 +100,13 @@ public class Player : Entity, IDamagable
         GameManager.LoadLevel("Main Menu");
     }
 
+    public void ReciveDamage(float damage)
+    {
+        Life -= damage;
+
+        if (Life < 0) Die();
+    }
+
 
 
     #region Funciones de Movimiento
@@ -126,8 +154,13 @@ public class Player : Entity, IDamagable
         Gizmos.DrawLine(_footTransform.position, _footTransform.position + Vector3.down * _raycastDistance);
     }
 
-    public void ReciveDamage(float damage)
+    public void Health(float damage)
     {
         throw new System.NotImplementedException();
+    }
+
+    public override void Attack()
+    {
+        
     }
 }

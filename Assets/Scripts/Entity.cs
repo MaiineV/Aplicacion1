@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class Entity : MonoBehaviour
+public abstract class Entity : MonoBehaviour
 {
     [SerializeField] protected float life;
+    [SerializeField] protected float maxLife;
     [SerializeField] protected float speed;
 
     protected void Move(Vector3 target)
@@ -18,8 +19,5 @@ public class Entity : MonoBehaviour
         transform.position += transform.forward * Time.deltaTime * speed;
     }
 
-    //protected void Move(Vector3 horizontal, Vector3 vertical)
-    //{
-    //    transform.position += (vertical + horizontal).normalized * Time.deltaTime * speed;
-    //}
+    public abstract void Attack();
 }

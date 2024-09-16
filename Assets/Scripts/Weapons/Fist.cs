@@ -28,5 +28,12 @@ public class Fist : MeleeWeapon
         {
             target.ReciveDamage(dmg);
         }
+
+        Enemy enemy = target as Enemy;
+
+        if (enemy != null)
+        {
+            
+        }
     }
 }

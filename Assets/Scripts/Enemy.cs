@@ -14,6 +14,8 @@ public class Enemy : Entity, IDamagable
 
     public bool isSolid;
 
+    public float GetLife { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
     private void Awake()
     {
         enemyData = new EnemyData();
@@ -72,5 +74,15 @@ public class Enemy : Entity, IDamagable
         Debug.Log(life);
         if (life <= 0)
             Destroy(gameObject);
+    }
+
+    public void Health(float damage)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Attack()
+    {
+        throw new System.NotImplementedException();
     }
 }
