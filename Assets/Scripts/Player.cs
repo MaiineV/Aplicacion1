@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Weapons;
 
@@ -22,13 +24,22 @@ public class Player : Entity, IDamagable
     Player coopPlayer;
     WeaponManager weaponManager;
 
-    public float Life 
+    public delegate void MovementDelegate();
+    public MovementDelegate movement = delegate { };
+
+    public Action<float> Damage = delegate { };
+
+    public Func<float, float, bool> CalculateMax;
+
+
+
+    public float Life
     {
-        get 
+        get
         {
             return life;
         }
-        private set 
+        private set
         {
             if (value > maxLife)
             {
@@ -45,6 +56,11 @@ public class Player : Entity, IDamagable
 
     void Awake()
     {
+        movement += Move;
+        movement += Jump;
+
+        Damage = TakeDamage;
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -64,9 +80,28 @@ public class Player : Entity, IDamagable
     {
         if (isPaused) return;
 
+        movement();
 
-        Move();
-        Jump();
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            movement = AirMovement;
+
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            movement = Move;
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Damage = delegate { };
+            StartCoroutine(WaitNoDamage());
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Damage(10f);
+        }
 
         if (Input.GetMouseButtonDown(0))
             weaponManager.Shoot();
@@ -75,11 +110,17 @@ public class Player : Entity, IDamagable
         //LoQueSea(5f);
 
         string myName = "";
-        float damage= 10;
-        if(LoQueSea(out myName, damage))
+        float damage = 10;
+        if (LoQueSea(out myName, damage))
         {
-            Debug.Log("Aca");
+            //Debug.Log("Aca");
         }
+    }
+
+    IEnumerator WaitNoDamage() 
+    {
+        yield return new WaitForSeconds(1);
+        Damage = TakeDamage;
     }
 
     public bool LoQueSea(out string name, float dmg, int life = 0, params string[] strings)
@@ -102,15 +143,22 @@ public class Player : Entity, IDamagable
 
     public void ReciveDamage(float damage)
     {
+        Damage(damage);
+    }
+
+    private void TakeDamage(float damage)
+    {
         Life -= damage;
 
         if (Life < 0) Die();
+
+        EventManager.Trigger(EventType.OnPlayerDamage, Life);
     }
 
 
 
     #region Funciones de Movimiento
-    internal int Jump()
+    internal void Jump()
     {
         if (_rigidbody == null || 0 == 1) _rigidbody = GetComponent<Rigidbody>();
 
@@ -123,12 +171,12 @@ public class Player : Entity, IDamagable
             _rigidbody.AddForce(Vector3.up * _jumpForce);
         }
 
-        var random = Random.Range(0, 100);
+        //var random = Random.Range(0, 100);
 
-        if (random > 50) { return random; }
+        //if (random > 50) { return random; }
 
 
-        return 0;
+        //return 0;
 
     }
 
@@ -136,6 +184,13 @@ public class Player : Entity, IDamagable
     {
         var forward = transform.forward * Input.GetAxisRaw("Vertical");
         var rigth = transform.right * Input.GetAxisRaw("Horizontal");
+        transform.position += (forward + rigth).normalized * Time.deltaTime * speed;
+    }
+
+    private void AirMovement()
+    {
+        var forward = transform.forward * Input.GetAxisRaw("Vertical");
+        var rigth = transform.up * Input.GetAxisRaw("Horizontal");
         transform.position += (forward + rigth).normalized * Time.deltaTime * speed;
     }
 
@@ -161,6 +216,6 @@ public class Player : Entity, IDamagable
 
     public override void Attack()
     {
-        
+
     }
 }
