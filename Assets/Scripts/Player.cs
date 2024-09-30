@@ -31,6 +31,10 @@ public class Player : Entity, IDamagable
 
     public Func<float, float, bool> CalculateMax;
 
+    private Vector3 velocity;
+
+    private Plataform actualPlataform;
+
 
 
     public float Life
@@ -82,6 +86,7 @@ public class Player : Entity, IDamagable
 
         movement();
 
+        #region Keycodes
         if (Input.GetKeyDown(KeyCode.P))
         {
             movement = AirMovement;
@@ -106,8 +111,7 @@ public class Player : Entity, IDamagable
         if (Input.GetMouseButtonDown(0))
             weaponManager.Shoot();
 
-        //LoQueSea(5f, 10, "A", "B", "C");
-        //LoQueSea(5f);
+        #endregion
 
         string myName = "";
         float damage = 10;
@@ -115,6 +119,14 @@ public class Player : Entity, IDamagable
         {
             //Debug.Log("Aca");
         }
+        Loop();
+    }
+
+    public void AddItems(List<Item> newItems) { }
+
+    private void Loop()
+    {
+        Loop();
     }
 
     IEnumerator WaitNoDamage() 
@@ -170,28 +182,27 @@ public class Player : Entity, IDamagable
             _rigidbody.velocity = actualVelocity;
             _rigidbody.AddForce(Vector3.up * _jumpForce);
         }
-
-        //var random = Random.Range(0, 100);
-
-        //if (random > 50) { return random; }
-
-
-        //return 0;
-
     }
 
     public override void Move()
     {
         var forward = transform.forward * Input.GetAxisRaw("Vertical");
         var rigth = transform.right * Input.GetAxisRaw("Horizontal");
-        transform.position += (forward + rigth).normalized * Time.deltaTime * speed;
+        velocity = (forward + rigth).normalized * speed;
+
+        if (actualPlataform != null)
+        {
+            velocity += actualPlataform.dir;
+        }
+        velocity.y = _rigidbody.velocity.y;
+        _rigidbody.velocity = velocity;
     }
 
     private void AirMovement()
     {
         var forward = transform.forward * Input.GetAxisRaw("Vertical");
         var rigth = transform.up * Input.GetAxisRaw("Horizontal");
-        transform.position += (forward + rigth).normalized * Time.deltaTime * speed;
+        transform.localPosition += (forward + rigth).normalized * Time.deltaTime * speed;
     }
 
     //public void Move()
@@ -217,5 +228,27 @@ public class Player : Entity, IDamagable
     public override void Attack()
     {
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Plataform")) return;
+
+        var plataform = other.GetComponent<Plataform>();
+
+        if (plataform == null) return;
+
+        actualPlataform = plataform;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag("Plataform")) return;
+
+        var plataform = other.GetComponent<Plataform>();
+
+        if (plataform == null || plataform != actualPlataform) return;
+
+        actualPlataform = null; 
     }
 }
