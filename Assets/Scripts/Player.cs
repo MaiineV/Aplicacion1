@@ -35,6 +35,8 @@ public class Player : Entity, IDamagable
 
     private Plataform actualPlataform;
 
+    private LinkedList<string> namesList;
+
 
 
     public float Life
@@ -60,6 +62,8 @@ public class Player : Entity, IDamagable
 
     void Awake()
     {
+        namesList = new LinkedList<string>("Pepe");
+
         movement += Move;
         movement += Jump;
 
@@ -111,6 +115,13 @@ public class Player : Entity, IDamagable
         if (Input.GetMouseButtonDown(0))
             weaponManager.Shoot();
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            namesList.Add("Pepe" + UnityEngine.Random.Range(0,100));
+        }
+
+
+
         #endregion
 
         string myName = "";
@@ -119,15 +130,10 @@ public class Player : Entity, IDamagable
         {
             //Debug.Log("Aca");
         }
-        Loop();
     }
 
     public void AddItems(List<Item> newItems) { }
 
-    private void Loop()
-    {
-        Loop();
-    }
 
     IEnumerator WaitNoDamage() 
     {
