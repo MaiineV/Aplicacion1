@@ -1,6 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+public enum EnemyType 
+{
+    MELEE,
+    RANGE,
+    TANK,
+    BOSS
+}
 
 public class Enemy : Entity, IDamagable
 {
@@ -13,6 +22,8 @@ public class Enemy : Entity, IDamagable
     private Transform target;
 
     public bool isSolid;
+
+    [SerializeField] public EnemyType enemyType; 
 
     public float GetLife { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -37,7 +48,7 @@ public class Enemy : Entity, IDamagable
         {
             Move(target.position);
         }
-        else
+        else if (wayPoints.Length > 0)
         {
             FollowPath();
             Move(wayPoints[actualWaypoint].position);
@@ -54,6 +65,11 @@ public class Enemy : Entity, IDamagable
         }
     }
 
+    public void SetWaypoints(Transform[] newWaypoints)
+    {
+        wayPoints = newWaypoints;
+    }
+
     private void OnDrawGizmos()
     {
         if (isSolid)
@@ -66,14 +82,19 @@ public class Enemy : Entity, IDamagable
         }
     }
 
-    public void ReciveDamage(float damage)
+    public bool ReciveDamage(float damage)
     {
         Debug.Log(life);
         life-=damage;
 
         Debug.Log(life);
         if (life <= 0)
-            Destroy(gameObject);
+        {
+            Destroy(gameObject, .5f);
+            return true;
+        }
+        
+        return false;
     }
 
     public void Health(float damage)

@@ -11,20 +11,9 @@ public class Crate : MonoBehaviour,IDamagable
         throw new System.NotImplementedException();
     }
 
-    public void ReciveDamage(float damage)
+    public bool ReciveDamage(float damage)
     {
         Destroy(gameObject);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return true;
     }
 }

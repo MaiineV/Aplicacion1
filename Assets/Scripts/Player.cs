@@ -37,7 +37,12 @@ public class Player : Entity, IDamagable
 
     private LinkedList<string> namesList;
 
+    private int gold;
+    private int xp;
+    private int lvl = 1;
 
+    private Stack<Vector3> _lastPositions = new Stack<Vector3>();
+    private float _timer;
 
     public float Life
     {
@@ -120,9 +125,23 @@ public class Player : Entity, IDamagable
             namesList.Add("Pepe" + UnityEngine.Random.Range(0,100));
         }
 
-
+        if (Input.GetKey(KeyCode.R))
+        {
+            RewindTime();
+            movement = delegate { };
+        }
+        else if(Input.GetKeyUp(KeyCode.R))
+            movement = Move;
 
         #endregion
+
+        _timer += Time.deltaTime;
+
+        if(_timer > 1)
+        {
+            _lastPositions.Push(transform.position);
+            _timer = 0;
+        }
 
         string myName = "";
         float damage = 10;
@@ -141,6 +160,7 @@ public class Player : Entity, IDamagable
         Damage = TakeDamage;
     }
 
+    #region Prueba de sobrecarga
     public bool LoQueSea(out string name, float dmg, int life = 0, params string[] strings)
     {
         name = "Maine";
@@ -153,15 +173,35 @@ public class Player : Entity, IDamagable
     {
 
     }
+    #endregion
 
     private void Die()
     {
         GameManager.LoadLevel("Main Menu");
     }
 
-    public void ReciveDamage(float damage)
+    private void RewindTime()
+    {
+        if (_lastPositions.Count <= 0) return;
+
+        var lastPosition = _lastPositions.Peek();
+
+        var dirVector = (lastPosition - transform.position);
+
+        transform.position += dirVector.normalized * Time.deltaTime * speed;
+
+        if (dirVector.magnitude < .2f)
+        {
+            _lastPositions.Pop();
+        }
+    }
+
+    #region Recive Damage
+    public bool ReciveDamage(float damage)
     {
         Damage(damage);
+
+        return true;
     }
 
     private void TakeDamage(float damage)
@@ -172,7 +212,7 @@ public class Player : Entity, IDamagable
 
         EventManager.Trigger(EventType.OnPlayerDamage, Life);
     }
-
+    #endregion
 
 
     #region Funciones de Movimiento
@@ -226,6 +266,7 @@ public class Player : Entity, IDamagable
         Gizmos.DrawLine(_footTransform.position, _footTransform.position + Vector3.down * _raycastDistance);
     }
 
+    #region IDamagable
     public void Health(float damage)
     {
         throw new System.NotImplementedException();
@@ -235,6 +276,26 @@ public class Player : Entity, IDamagable
     {
 
     }
+
+    #endregion
+
+    public void GetLoot(LootData lootData)
+    {
+        gold += lootData.gold;
+        xp += lootData.xp;
+
+        if(xp > 50)
+        {
+            lvl++;
+            xp = 0;
+        }
+
+        Debug.Log("Gold: " + gold);
+        Debug.Log($"Xp: {xp}");
+        Debug.Log($"Level: {lvl}");
+    }
+
+    #region Triggers
 
     private void OnTriggerEnter(Collider other)
     {
@@ -257,4 +318,6 @@ public class Player : Entity, IDamagable
 
         actualPlataform = null; 
     }
+
+    #endregion
 }

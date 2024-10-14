@@ -7,6 +7,7 @@ public class Weapon : MonoBehaviour
     public float dmg;
     public float attackSpeed;
     public float range;
+    [SerializeField] protected Player player;
 
     public virtual void Attack()
     {
