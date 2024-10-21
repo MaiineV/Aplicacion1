@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     {
         _timer += Time.deltaTime;
 
-        if (_timer > 2)
+        if (_timer > 2 && _spawnOrder.Count > 0)
         {
             #region With try and catch
             try
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
             }
             finally
             {
-                Debug.Log("Final");
+                //Debug.Log("Final");
             }
             #endregion
 

@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using Weapons;
+using SaveSystem;
 
-public class Player : Entity, IDamagable
+public class Player : Entity, IDamagable, ISaver
 {
     [SerializeField] private float _jumpForce = 0;
     [SerializeField] private float _raycastDistance = 0;
@@ -64,9 +65,12 @@ public class Player : Entity, IDamagable
     }
 
     public float GetLife { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public string SaverID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
     void Awake()
     {
+        SaveManagerV2.AddItem("Player", this);
+
         namesList = new LinkedList<string>("Pepe");
 
         movement += Move;
@@ -133,9 +137,23 @@ public class Player : Entity, IDamagable
         else if(Input.GetKeyUp(KeyCode.R))
             movement = Move;
 
-        #endregion
 
-        _timer += Time.deltaTime;
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            //SaveManagerV2.SaveGameWithPlayerPref(new PlayerData { position = transform.position });
+            SaveGame();
+        }
+
+        if (Input.GetKeyUp(KeyCode.B))
+        {
+            //var playerData = SaveManagerV2.LoadGamePlayerPref();
+            //transform.position = playerData.position;
+        }
+
+
+            #endregion
+
+            _timer += Time.deltaTime;
 
         if(_timer > 1)
         {
@@ -319,5 +337,17 @@ public class Player : Entity, IDamagable
         actualPlataform = null; 
     }
 
+
     #endregion
+
+    public string SaveGame()
+    {
+        return JsonUtility.ToJson(new PlayerData() { position = transform.position});
+    }
+
+    public void LoadGame(string serializedData)
+    {
+        var playerData = JsonUtility.FromJson<PlayerData>(serializedData);
+        transform.position = playerData.position;
+    }
 }
