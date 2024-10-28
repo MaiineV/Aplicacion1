@@ -91,6 +91,8 @@ public class Player : Entity, IDamagable, ISaver
         _rigidbody = GetComponent<Rigidbody>();
 
         weaponManager = new WeaponManager(this, _fist);
+
+        
     }
 
     void Update()
@@ -228,7 +230,7 @@ public class Player : Entity, IDamagable, ISaver
 
         if (Life < 0) Die();
 
-        EventManager.Trigger(EventType.OnPlayerDamage, Life);
+        EventManager.Trigger(EventType.OnPlayerDamage, Life, this, gameObject, Vector3.zero);
     }
     #endregion
 

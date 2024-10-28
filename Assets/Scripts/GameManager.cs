@@ -33,8 +33,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Transform[] waypoints;
 
+    [SerializeField] private int enemiesToSpawn;
+
     void Awake()
     {
+        enemiesToSpawn = enemiesToSpawn.GetRandomExponential();
+        Debug.Log(enemiesToSpawn);
+
         if (Instance != null)
         {
             Destroy(gameObject);

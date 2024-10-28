@@ -23,6 +23,8 @@ namespace Weapons
         Weapon[] equipedWeapons = new Weapon[3];
         int actualWeaponIndex;
 
+        Mesh mesh;
+
         Dictionary<WeaponType, Weapon> _possibleWeapons = new Dictionary<WeaponType, Weapon>();
 
         Weapon _fistWeapon;
@@ -35,6 +37,7 @@ namespace Weapons
             _possibleWeapons.Add(WeaponType.BOW, new Weapon());
             _possibleWeapons.Add(WeaponType.SWORD, new Weapon());
             _possibleWeapons.Add(WeaponType.KNIFE, new Weapon());
+
         }
 
         public void Shoot()
@@ -48,7 +51,7 @@ namespace Weapons
             {
                 _possibleWeapons[weaponType] = newWeapon;
             }
-            else 
+            else
             {
                 _possibleWeapons.Add(weaponType, newWeapon);
             }
@@ -60,6 +63,17 @@ namespace Weapons
             var weaponType2 = (WeaponType)number;
 
             _fistWeapon = _possibleWeapons[weaponType];
+        }
+
+        public void CombineWeapons()
+        {
+            equipedWeapons[0] = equipedWeapons[0] + equipedWeapons[1];
+            equipedWeapons.UpdateMesh(mesh);
+        }
+
+        public float GetTotalEquipedDamage()
+        {
+            return equipedWeapons.GetTotalDamage();
         }
     }
 }

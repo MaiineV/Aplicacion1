@@ -398,6 +398,7 @@ MonoBehaviour:
   waypoints:
   - {fileID: 225456412}
   - {fileID: 647622485}
+  enemiesToSpawn: 4
 --- !u!4 &541583304
 Transform:
   m_ObjectHideFlags: 0
@@ -1545,10 +1546,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c9a0766d06c414eac40f08b4c6686a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 4
-  attackSpeed: 5
-  range: 2
+  weaponData:
+    dmg: 0
+    attackSpeed: 0
+    range: 0
+    mesh: {fileID: 0}
+    material: {fileID: 0}
   player: {fileID: 1600281243}
+  type: 0
   attackCollider: {fileID: 1148823774}
 --- !u!4 &1148823776
 Transform:
@@ -2726,10 +2731,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e628beace8076dd4ebad515e1f999653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 0
-  attackSpeed: 0
-  range: 0
+  weaponData:
+    dmg: 0
+    attackSpeed: 0
+    range: 0
+    mesh: {fileID: 0}
+    material: {fileID: 0}
   player: {fileID: 0}
+  type: 0
   attackCollider: {fileID: 0}
   swordName: 
 --- !u!136 &2091600505

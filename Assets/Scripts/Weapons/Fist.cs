@@ -24,7 +24,7 @@ public class Fist : MeleeWeapon
 
         IDamagable target = other.gameObject.GetComponent<IDamagable>();
 
-        if (target != null && target.ReciveDamage(dmg))
+        if (target != null && target.ReciveDamage(weaponData.dmg))
         {
             Enemy enemy = target as Enemy;
 
