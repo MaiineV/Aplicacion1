@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 namespace SaveSystem
@@ -8,7 +10,9 @@ namespace SaveSystem
     [Serializable]
     public struct PlayerData
     {
-        public Vector3 position;
+        public float positionx;
+        public float positiony;
+        public float positionz;
     }
 
     public class SaveManager : MonoBehaviour
@@ -33,7 +37,7 @@ namespace SaveSystem
 
     public static class SaveManagerV2
     {
-        private static string _savingPath;
+        private static string _savingPath = @"C:\\Documentos\GameSaves";
 
         private static Dictionary<string, ISaver> _saveItems = new Dictionary<string, ISaver>();
 
@@ -58,7 +62,6 @@ namespace SaveSystem
             {
                 PlayerPrefs.SetString(item.Key, item.Value.SaveGame());
             }
-            
         }
 
         public static void LoadGamePlayerPref()
@@ -85,7 +88,19 @@ namespace SaveSystem
 
         public static void SaveGameWithFile(PlayerData playerData)
         {
+            var memoryStreamer = new MemoryStream();
+            var binaryFomatter = new BinaryFormatter();
 
+            binaryFomatter.Serialize(memoryStreamer, playerData);
+
+            if (!Directory.Exists(_savingPath))
+            {
+               Directory.CreateDirectory(_savingPath);
+            }
+
+            var file = File.Create( _savingPath );
+            file.Write( memoryStreamer.ToArray() );
+            file.Close();
         }
 
     }

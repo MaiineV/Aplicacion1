@@ -78,8 +78,8 @@ public class Player : Entity, IDamagable, ISaver
 
         Damage = TakeDamage;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         foreach (int i in ints)
         {
@@ -90,7 +90,8 @@ public class Player : Entity, IDamagable, ISaver
 
         _rigidbody = GetComponent<Rigidbody>();
 
-        weaponManager = new WeaponManager(this, _fist);
+        weaponManager = new WeaponManager
+            (this, _fist);
 
         
     }
@@ -142,8 +143,12 @@ public class Player : Entity, IDamagable, ISaver
 
         if (Input.GetKeyUp(KeyCode.G))
         {
-            //SaveManagerV2.SaveGameWithPlayerPref(new PlayerData { position = transform.position });
-            SaveGame();
+            SaveManagerV2.SaveGameWithFile(new PlayerData { 
+                positionx = transform.position.x,
+                positiony = transform.position.y,
+                positionz = transform.position.z
+            });
+            //SaveGame();
         }
 
         if (Input.GetKeyUp(KeyCode.B))
@@ -344,12 +349,13 @@ public class Player : Entity, IDamagable, ISaver
 
     public string SaveGame()
     {
-        return JsonUtility.ToJson(new PlayerData() { position = transform.position});
+        //return JsonUtility.ToJson(new PlayerData() { position = transform.position});
+        return String.Empty;
     }
 
     public void LoadGame(string serializedData)
     {
-        var playerData = JsonUtility.FromJson<PlayerData>(serializedData);
-        transform.position = playerData.position;
+        //var playerData = JsonUtility.FromJson<PlayerData>(serializedData);
+        //transform.position = playerData.position;
     }
 }
