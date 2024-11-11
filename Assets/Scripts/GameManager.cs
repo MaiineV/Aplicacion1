@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int enemiesToSpawn;
 
+    private List<Enemy> _enemies = new();
+
     void Awake()
     {
         enemiesToSpawn = enemiesToSpawn.GetRandomExponential();
@@ -101,7 +103,7 @@ public class GameManager : MonoBehaviour
 
                 foreach (var item in spawnData.enemyToSpawn)
                 {
-                    Instantiate(item).SetWaypoints(waypoints);
+                    _enemies.Add(Instantiate(item).SetWaypoints(waypoints));
                 }
             }
             catch (Exception ex)
@@ -140,5 +142,26 @@ public class GameManager : MonoBehaviour
         }
 
         return new LootData { gold = 0, xp = 0 };
+    }
+
+    public bool GetClosestEnemy(Vector3 playerPos, out Enemy closestEnemy)
+    {
+        closestEnemy = null;
+        if (_enemies.Count == 0) return false;
+
+        closestEnemy = _enemies[0];
+        var distance = Vector3.Distance(playerPos, _enemies[0].transform.position);
+        foreach (var item in _enemies)
+        {
+            var tempDistance = Vector3.Distance(playerPos, item.transform.position);
+
+            if (tempDistance < distance)
+            {
+                closestEnemy = item;
+                distance = tempDistance;
+            }
+        }
+
+        return true;
     }
 }

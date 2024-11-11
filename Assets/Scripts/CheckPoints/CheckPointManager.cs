@@ -37,6 +37,27 @@ public class CheckPointManager : MonoBehaviour
         }
     }
 
+    [ContextMenu("Test Checkpoints")]
+    public void TestCheckPoint()
+    {
+        Debug.Log("Test");
+        if (PlayerPrefs.HasKey("RespawnSave"))
+        {
+            var saveKey = PlayerPrefs.GetString("RespawnSave");
+
+            //Opcion diccionario
+            if (CheckPointsDictionary.ContainsKey(saveKey))
+                CheckPointsDictionary[saveKey].LoadCheckPoint(_player);
+
+            //Opcion Lista
+            foreach (var item in CheckPointList)
+            {
+                if (item.name.Equals(saveKey))
+                    item.LoadCheckPoint(_player);
+            }
+        }
+    }
+
     public void AddCheckPoint(string checkPointName, CheckPoint checkPoint)
     {
         CheckPointsDictionary.TryAdd(checkPointName, checkPoint);

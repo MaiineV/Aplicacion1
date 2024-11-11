@@ -17,6 +17,7 @@ public class Enemy : Entity, IDamagable
     [SerializeField] private Transform[] wayPoints;
     [SerializeField] private float detectionRange;
     [SerializeField] private LayerMask playerMask;
+    [SerializeField] private PlayerStats playerStats;
     private int actualWaypoint = 0;
     private EnemyData enemyData;
     private Transform target;
@@ -65,9 +66,10 @@ public class Enemy : Entity, IDamagable
         }
     }
 
-    public void SetWaypoints(Transform[] newWaypoints)
+    public Enemy SetWaypoints(Transform[] newWaypoints)
     {
         wayPoints = newWaypoints;
+        return this;
     }
 
     private void OnDrawGizmos()

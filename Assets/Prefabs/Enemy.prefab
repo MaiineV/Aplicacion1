@@ -131,6 +131,7 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 128
+  playerStats: {fileID: 11400000, guid: 51d810d12d5b61a43ba7fb2c0248fbbb, type: 2}
   isSolid: 0
   enemyType: 0
 --- !u!54 &5771060267683254530
