@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +29,16 @@ public class Enemy : Entity, IDamagable
 
     public float GetLife { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
+    private List<Action> functions = new List<Action>();
+
     private void Awake()
     {
         enemyData = new EnemyData();
-        enemyData.damage = Random.Range(10, 15);
+        enemyData.damage = UnityEngine.Random.Range(10, 15);
         enemyData.skin = new Mesh();
         enemyData.attackType = "Melee";
+        functions.Add(FollowPath);
+        functions[0]();
     }
 
     void Update()
@@ -86,6 +91,7 @@ public class Enemy : Entity, IDamagable
 
     public bool ReciveDamage(float damage)
     {
+        SoundManager.instance.PlaySound(SoundID.GETHIT, false, UnityEngine.Random.Range(0.8f, 1.2f));
         Debug.Log(life);
         life-=damage;
 
